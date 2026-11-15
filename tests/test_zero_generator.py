@@ -9,14 +9,14 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from trademaster_core.paths import find_repo_root
+from core.paths import find_repo_root
 
 
 class ZeroGeneratorTest(unittest.TestCase):
     @classmethod
     def setUpClass(cls) -> None:
         cls.root = find_repo_root(Path(__file__))
-        cls.script = cls.root / "notebooks" / "generate_zero_submission.py"
+        cls.script = cls.root / "scripts" / "submit_zero.py"
         cls.sample_df = pd.read_csv(cls.root / "data" / "raw" / "sample_submission.csv")
 
     def test_zero_generator_creates_schema_aligned_submission(self) -> None:

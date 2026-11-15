@@ -8,23 +8,23 @@ The [report](report.pdf) explains the discovery, experiments, and final results.
 
 ## Files
 
-The Python scripts are in [notebooks/](notebooks/):
+The Python scripts are in [scripts/](scripts/):
 
 | File | Purpose |
 | --- | --- |
-| [generate_zero_submission.py](notebooks/generate_zero_submission.py) | Reconstruct known targets and use the sample submission's zero values for the unknown tail. Start here for the simplest version. |
-| [generate_tail_variants.py](notebooks/generate_tail_variants.py) | Compare zero and historical-mean tail estimates. |
-| [generate_tailvar_macro_specialist.py](notebooks/generate_tailvar_macro_specialist.py) | Estimate the tail with a ridge model. |
-| [generate_tailvar_robust_anchor.py](notebooks/generate_tailvar_robust_anchor.py) | Blend the ridge model with historical means. |
-| [solution.py](notebooks/solution.py) | Earlier XGBoost baseline. |
-| [archival_neural_baseline.py](notebooks/archival_neural_baseline.py) | Earlier neural-network baseline. |
+| [submit_zero.py](scripts/submit_zero.py) | Reconstruct known targets and use the sample submission's zero values for the unknown tail. Start here for the simplest version. |
+| [submit_variants.py](scripts/submit_variants.py) | Compare zero and historical-mean tail estimates. |
+| [submit_ridge.py](scripts/submit_ridge.py) | Estimate the tail with a ridge model. |
+| [submit_blend.py](scripts/submit_blend.py) | Blend the ridge model with historical means. |
+| [baseline_xgboost.py](scripts/baseline_xgboost.py) | Earlier XGBoost baseline. |
+| [baseline_neural.py](scripts/baseline_neural.py) | Earlier neural-network baseline. |
 
 Supporting files:
 
-- [trademaster_core/](trademaster_core/) — shared reconstruction and tail-model code.
-- [notebooks/helper/](notebooks/helper/) — data checks and boundary backtests.
+- [core/](core/) — shared reconstruction and tail-model code.
+- [scripts/checks/](scripts/checks/) — data checks and boundary backtests.
 - [tests/](tests/) — regression tests using the competition data.
-- [report_overleaf/](report_overleaf/) — LaTeX report source, proof scripts, saved outputs, and code listings.
+- [report/](report/) — LaTeX report source, proof scripts, saved outputs, and code listings.
 
 ## Run locally
 
@@ -48,7 +48,7 @@ data/raw/
 Generate a submission with zero values for the unknown tail:
 
 ```sh
-python3 notebooks/generate_zero_submission.py
+python3 scripts/submit_zero.py
 ```
 
 The CSV is saved in `submissions/`. Other models can be run directly using the scripts linked above.
@@ -56,6 +56,6 @@ The CSV is saved in `submissions/`. Other models can be run directly using the s
 To run the checks after adding the data:
 
 ```sh
-python3 notebooks/helper/run_sanity_checks.py
+python3 scripts/checks/check_data.py
 python3 -m unittest discover -s tests -v
 ```

@@ -7,8 +7,8 @@ from pathlib import Path
 import numpy as np
 import pandas as pd
 
-from trademaster_core.leak_math import build_known_region_predictions, compounded_target
-from trademaster_core.paths import find_repo_root
+from core.reconstruction import build_known_region_predictions, compounded_target
+from core.paths import find_repo_root
 
 
 class StructuralClaimsTest(unittest.TestCase):

@@ -1,26 +1,26 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
-"""Synchronize repo source files into ``report_overleaf/code``."""
+"""Synchronize repo source files into ``report/code``."""
 
 import shutil
 from pathlib import Path
 
 SYNC_MAP = {
-    "notebooks/archival_neural_baseline.py": "report_overleaf/code/archival_neural_baseline.py",
-    "notebooks/generate_zero_submission.py": "report_overleaf/code/generate_zero_submission.py",
-    "notebooks/generate_tail_variants.py": "report_overleaf/code/generate_tail_variants.py",
-    "notebooks/generate_tailvar_macro_specialist.py": "report_overleaf/code/generate_tailvar_macro_specialist.py",
-    "notebooks/generate_tailvar_robust_anchor.py": "report_overleaf/code/generate_tailvar_robust_anchor.py",
-    "notebooks/helper/run_sanity_checks.py": "report_overleaf/code/helper/run_sanity_checks.py",
-    "notebooks/helper/verify_minute27_cutoff.py": "report_overleaf/code/helper/verify_minute27_cutoff.py",
-    "notebooks/helper/compare_boundary_cv.py": "report_overleaf/code/helper/compare_boundary_cv.py",
-    "trademaster_core/__init__.py": "report_overleaf/code/trademaster_core/__init__.py",
-    "trademaster_core/constants.py": "report_overleaf/code/trademaster_core/constants.py",
-    "trademaster_core/paths.py": "report_overleaf/code/trademaster_core/paths.py",
-    "trademaster_core/leak_math.py": "report_overleaf/code/trademaster_core/leak_math.py",
-    "trademaster_core/submission_io.py": "report_overleaf/code/trademaster_core/submission_io.py",
-    "trademaster_core/tail_models.py": "report_overleaf/code/trademaster_core/tail_models.py",
+    "scripts/baseline_neural.py": "report/code/baseline_neural.py",
+    "scripts/submit_zero.py": "report/code/submit_zero.py",
+    "scripts/submit_variants.py": "report/code/submit_variants.py",
+    "scripts/submit_ridge.py": "report/code/submit_ridge.py",
+    "scripts/submit_blend.py": "report/code/submit_blend.py",
+    "scripts/checks/check_data.py": "report/code/checks/check_data.py",
+    "scripts/checks/check_cutoff.py": "report/code/checks/check_cutoff.py",
+    "scripts/checks/compare_boundaries.py": "report/code/checks/compare_boundaries.py",
+    "core/__init__.py": "report/code/core/__init__.py",
+    "core/constants.py": "report/code/core/constants.py",
+    "core/paths.py": "report/code/core/paths.py",
+    "core/reconstruction.py": "report/code/core/reconstruction.py",
+    "core/submissions.py": "report/code/core/submissions.py",
+    "core/tail_models.py": "report/code/core/tail_models.py",
 }
 
 
