@@ -1,130 +1,61 @@
 # TradeMaster Cup 2025 - 4th Place Solution
 
-This repository contains my solution for the TradeMaster Cup 2025 university Kaggle competition.
+My solution for the TradeMaster Cup 2025 university Kaggle competition, where I placed **4th out of 57 teams**.
 
-The core idea was:
-- reconstruct as much of the target as possible from dataset structure,
-- then forecast only the small unknown tail at the end.
+Most target values could be reconstructed from `feature_16` using future rows already present in the dataset. The final approach used this structure and handled the small unknown tail separately.
 
-The repo keeps the final submission generators, diagnostics, tests, and the report source in one place.
+The [report](report.pdf) explains the discovery, experiments, and final results.
 
-## Results
-- Final placement: 4th out of 57 teams in TradeMaster Cup 2025.
-- Main solution idea: reconstruct deterministic target regions exactly, then model only the small unknown tail.
-- Strong public submissions reached 0.0000 on the public leaderboard.
-- Private leaderboard analysis showed that final ranking depended on tiny tail-behavior differences rather than broad forecasting quality.
+## Files
 
-## Report
-If you want the full write-up, you can read `report.pdf` in the repository root.
+The Python scripts are in [notebooks/](notebooks/):
 
-## What Is In This Repo
+| File | Purpose |
+| --- | --- |
+| [generate_zero_submission.py](notebooks/generate_zero_submission.py) | Reconstruct known targets and use the sample submission's zero values for the unknown tail. Start here for the simplest version. |
+| [generate_tail_variants.py](notebooks/generate_tail_variants.py) | Compare zero and historical-mean tail estimates. |
+| [generate_tailvar_macro_specialist.py](notebooks/generate_tailvar_macro_specialist.py) | Estimate the tail with a ridge model. |
+| [generate_tailvar_robust_anchor.py](notebooks/generate_tailvar_robust_anchor.py) | Blend the ridge model with historical means. |
+| [solution.py](notebooks/solution.py) | Earlier XGBoost baseline. |
+| [archival_neural_baseline.py](notebooks/archival_neural_baseline.py) | Earlier neural-network baseline. |
 
-### Main entrypoints
-- `notebooks/solution.py` - baseline pure-ML XGBoost pipeline.
-- `notebooks/generate_zero_submission.py` - generates the hard-zero fallback submission.
-- `notebooks/generate_tail_variants.py` - generates simple tail variants such as `zero` and `expanding_all`.
-- `notebooks/generate_tailvar_macro_specialist.py` - generates the macro ridge tail model.
-- `notebooks/generate_tailvar_robust_anchor.py` - generates the robust blended tail model.
-- `notebooks/archival_neural_baseline.py` - archival neural baseline kept for completeness.
+Supporting files:
 
-### Diagnostics and checks
-- `notebooks/helper/run_sanity_checks.py` - quick structural checks.
-- `notebooks/helper/verify_minute27_cutoff.py` - verifies the cutoff alignment logic.
-- `notebooks/helper/compare_boundary_cv.py` - compares local boundary backtests.
-- `tests/` - lightweight regression tests.
+- [trademaster_core/](trademaster_core/) — shared reconstruction and tail-model code.
+- [notebooks/helper/](notebooks/helper/) — data checks and boundary backtests.
+- [tests/](tests/) — regression tests using the competition data.
+- [report_overleaf/](report_overleaf/) — LaTeX report source, proof scripts, saved outputs, and code listings.
 
-### Shared code
-- `trademaster_core/` - shared utilities for leak math, tail models, submission IO, and path handling.
+## Run locally
 
-### Report material
-- `report_overleaf/` - LaTeX report source, proof scripts, outputs, and mirrored code listings.
-- `scripts/sync_report_code.py` - syncs repo code into `report_overleaf/code/`.
+The original environment used Python 3.13. Run these commands from the repository root:
 
-## Required Data
-Place the competition files under `data/raw/`:
-- `data/raw/train_v2.csv`
-- `data/raw/test_v2.csv`
-- `data/raw/sample_submission.csv`
-
-Raw data is not included in this repo.
-
-## Setup
-Run from the repository root:
-
-```bash
+```sh
 python3 -m venv venv
 source venv/bin/activate
 python3 -m pip install -r requirements.txt
 ```
 
-## Quick Start
+Place the competition files in `data/raw/` (data is not included):
 
-Run the main checks:
-
-```bash
-make sanity
-make tests
-make proofs
+```text
+data/raw/
+├── train_v2.csv
+├── test_v2.csv
+└── sample_submission.csv
 ```
 
-If you want to keep the report appendix code in sync with the repo code:
+Generate a submission with zero values for the unknown tail:
 
-```bash
-make sync-report-code
+```sh
+python3 notebooks/generate_zero_submission.py
 ```
 
-## Common Commands
+The CSV is saved in `submissions/`. Other models can be run directly using the scripts linked above.
 
-### Generate the zero submission
-```bash
-python3 notebooks/generate_zero_submission.py \
-  --output-name submission_ZERO_CV0.00005.csv
+To run the checks after adding the data:
+
+```sh
+python3 notebooks/helper/run_sanity_checks.py
+python3 -m unittest discover -s tests -v
 ```
-
-### Generate simple tail variants
-```bash
-python3 notebooks/generate_tail_variants.py
-```
-
-### Generate the macro tail model
-```bash
-python3 notebooks/generate_tailvar_macro_specialist.py \
-  --ridge-lambda 0.1 \
-  --clip-abs 0.1 \
-  --output-name submission_TAILVAR_MACRO_SPECIALIST_LAM0p1_CV0.00708.csv
-```
-
-### Generate the robust blended tail model
-```bash
-python3 notebooks/generate_tailvar_robust_anchor.py \
-  --macro-weight 0.75 \
-  --ridge-lambda 0.1 \
-  --clip-abs 0.1 \
-  --output-name submission_TAILVAR_ROBUST_ANCHOR_W0p75_LAM0p1_CV0.00705.csv
-```
-
-### Run the baseline XGBoost pipeline
-```bash
-python3 notebooks/solution.py
-```
-
-### Run diagnostics
-```bash
-python3 notebooks/helper/verify_minute27_cutoff.py
-python3 notebooks/helper/compare_boundary_cv.py
-```
-
-## Submission Naming
-When saving manual outputs, I use:
-
-`submission_<PIPELINE>_<VARIANT>_CV<LOCAL_CV>.csv`
-
-Examples:
-- `submission_ZERO_CV0.00005.csv`
-- `submission_TAILVAR_EXPANDING_ALL_CV0.00712.csv`
-- `submission_TAILVAR_ROBUST_ANCHOR_W0p75_LAM0p1_CV0.00705.csv`
-
-## Notes
-- `submissions/` is git-ignored.
-- Raw data is git-ignored.
-- The repo is organized for reproducibility rather than as a production package.

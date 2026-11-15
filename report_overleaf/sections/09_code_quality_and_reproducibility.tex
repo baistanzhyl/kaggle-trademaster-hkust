@@ -14,10 +14,9 @@ I separated the solution into independent scripts:
 \end{itemize}
 The \texttt{trademaster\_core/} module stores shared utilities for deterministic target reconstruction, tail-future generation, submission IO, and path resolution, so the main scripts can remain thin command-line entrypoints.
 
-\subsection{Operational entry points and lightweight regression tests}
+\subsection{Regression tests and report code listings}
 To make the repository easier to inspect and rerun, I also added:
 \begin{itemize}[leftmargin=1.5em]
-  \item a root \texttt{Makefile} with one-command targets for sanity checks, proofs, diagnostics, and submission generation;
   \item a \texttt{tests/} folder with regression tests for leak equations, cutoff alignment, unknown-tail sizes, submission schema, zero-submission generation, tail-model finiteness, and helper-script smoke runs;
   \item a report-code sync script (\texttt{scripts/sync\_report\_code.py}) that copies source files into \texttt{report\_overleaf/code/}, so appendix mirrors are synchronized rather than maintained manually.
 \end{itemize}
@@ -102,11 +101,11 @@ Legacy boundary-CV helper output & \texttt{P09} & \texttt{O09} \\
 
 \subsection{End-to-End Reproduction Commands}
 \begin{Verbatim}[fontsize=\small]
-# Optional one-command entry points
-make sanity
-make tests
-make proofs
-make sync-report-code
+# Run regression tests (requires competition data)
+python3 -m unittest discover -s tests -v
+
+# Update code listings in the report
+python3 scripts/sync_report_code.py
 
 # 0) Run sanity checks for formulas/coverage/schema
 python3 notebooks/helper/run_sanity_checks.py
